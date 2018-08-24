@@ -9,7 +9,7 @@ import Database.Persist.MongoDB (Entity)
 
 import Model
 
-type API = "search" :> QueryParam "input" Text :> Get '[JSON] [Entity Item]
+type API = "search" :> QueryParam "Search" Text :> Get '[JSON] [Entity Item]
 
 
 api :: Proxy API

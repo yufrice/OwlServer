@@ -1,7 +1,5 @@
 module Models.Search where
 
-import Data.Text (Text)
-
-data SearchInfo = SearchInfo {
-  desc :: Text
-}
+import Data.Text (pack, unpack, Text)
+import Text.Read (readMaybe)
+import Servant

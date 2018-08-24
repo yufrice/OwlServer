@@ -7,7 +7,7 @@ import Data.Text
 import Data.Yaml (decodeFileEither, prettyPrintParseException,ParseException)
 import Database.Persist.MongoDB hiding (master)
 import Network (PortID(PortNumber))
-import Network.Wai.Handler.Warp 
+import Network.Wai.Handler.Warp
 import Network.Wai.Logger (withStdoutLogger)
 
 import Server

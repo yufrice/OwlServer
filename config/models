@@ -2,7 +2,7 @@ User
     ident Text
     password Text
     UniqueUser ident
-    
+
 Item json
     name Text
     image Text

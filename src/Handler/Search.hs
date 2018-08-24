@@ -9,8 +9,6 @@ import Model
 import Config
 import Utils
 
-getSearch ::  (Maybe Text) -> Owl [Entity Item]
-getSearch (Just input) = do
-  item <- runDB $ selectList [ItemDesc ==. input] []
-  return item
+getSearch :: Maybe Text -> Owl [Entity Item]
+getSearch (Just input) = runDB $ selectList [ItemDesc ==. input] []
 getSearch Nothing = return []
