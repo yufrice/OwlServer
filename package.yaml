@@ -1,6 +1,6 @@
 name:                OwlServer
 version:             0.1.0.0
-github:              "githubuser/OwlServer"
+github:              "Owl/OwlServer"
 license:             BSD3
 author:              "Author name here"
 maintainer:          "example@example.com"
@@ -27,6 +27,7 @@ dependencies:
 - servant
 - servant-server
 - template-haskell
+- transformers
 - text
 - network
 - mtl
@@ -40,6 +41,8 @@ dependencies:
 - cryptonite
 - bytestring
 - base64-bytestring
+- vector
+- aeson
 
 library:
   source-dirs: src

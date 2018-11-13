@@ -11,4 +11,4 @@ import Utils
 
 getSearch :: Maybe Text -> Owl [Entity Item]
 getSearch (Just input) = runDB $ selectList [ItemDesc ==. input] []
-getSearch Nothing = return []
+getSearch Nothing = runDB $ selectList [] []
