@@ -8,17 +8,23 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module Model where
+module Model (
+    module Model
+    , module Models.Vec
+) where
 
 import Data.ByteString (ByteString)
-import Database.Persist.TH
+import Data.Text
 import Database.Persist.Quasi
 import Database.Persist.MongoDB hiding (master)
-import Language.Haskell.TH.Syntax
-import Data.Text
+import Database.Persist.TH
+import Prelude (Bool(..))
 import Servant
+import Language.Haskell.TH.Syntax
+import Models.Vec
+import Utils
 
-share [mkPersist (mkPersistSettings (ConT ''MongoContext))]
+share [mkPersist (mkPersistSettings (ConT ''MongoContext)){mpsGenerateLenses = True}]
   $(persistFileWith upperCaseSettings "config/models")
 
 data FileInput = FileInput

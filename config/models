@@ -5,6 +5,11 @@ User
 
 Item json
     name Text
+    word Text
     image Text
     desc Text
     UniqueItem image
+
+Vector json
+    word Text
+    vector Vec
