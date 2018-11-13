@@ -6,14 +6,14 @@ import Database.Persist.MongoDB (ConnectionPool)
 
 import Api
 import Config
-import Handler.Item
+import Handler.GetItem
 import Handler.GetVector
 
 app :: AppConfig -> Application
 app env = serve api $ hoistServer api (flip runReaderT env) server
 
 server :: ServerT API Owl
-server = getSearch :<|> getVector
+server = getItem :<|> getVector
 
 type AppServer api = ServerT api AppHandler
 type AppHandler = ReaderT ConnectionPool Handler
