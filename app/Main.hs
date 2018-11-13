@@ -22,6 +22,7 @@ main = do
       appConfig <- AppConfig <$> makePool (cfg ^. #database)
       withStdoutLogger $ \aplogger -> do
         let settings = setPort (cfg ^. #listenPort) $ setLogger aplogger defaultSettings
+        putStrLn $ "start server listen:" ++ show (cfg ^. #listenPort)
         runSettings  settings $ app $ appConfig (cfg ^. #staticDir)
 
 makePool :: DbConfig -> IO ConnectionPool
