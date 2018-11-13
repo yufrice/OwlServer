@@ -1,14 +1,15 @@
-module Handler.Search where
+module Handler.Item where
 
 import Database.Persist.MongoDB
+import qualified Data.Text as T
 import Servant
-import Data.Text hiding (map)
 
 import Api
 import Model
 import Config
 import Utils
 
-getSearch :: Maybe Text -> Owl [Entity Item]
-getSearch (Just input) = runDB $ selectList [ItemDesc ==. input] []
+getSearch :: Maybe T.Text -> Owl [Entity Item]
+getSearch (Just input) = runDB $ selectList [ItemName ==. input] []
+
 getSearch Nothing = runDB $ selectList [] []

@@ -14,4 +14,3 @@ runDB :: (MonadReader AppConfig m, MonadIO m) => MongoPersistM a -> m a
 runDB query = do
   pool <- asks getPool
   liftIO $ runResourceT $ runMongoDBPool master query pool
-

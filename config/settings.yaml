@@ -1,4 +1,4 @@
-listenPort: 8080
+listenPort: 8484
 staticDir: "static"
 
 database:
