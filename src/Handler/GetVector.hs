@@ -6,7 +6,7 @@ import Database.Persist.MongoDB
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Ord (comparing)
-import Data.List (sortBy)
+import Data.List (null, sortBy)
 import Control.Lens ((^.))
 import Servant
 
@@ -19,11 +19,16 @@ import Utils
 
 getVector :: Maybe T.Text -> Owl SearchResult
 getVector (Just input) = do
-    (Entity _ center):_ <- runDB $ selectList [VectorWord ==. input] []
-    vecs <- runDB $ selectList [VectorWord !=. input] []
-    _sim <- return $ mostSim (center ^. vectorVector) vecs
-    word <- return $ map (\(Entity _ x) -> x ^. vectorWord) vecs
-    return $ SearchResult $ (sortBy.flip) (comparing sim) $ filter (\x -> minSim < sim x) $ zipWith ResultWord word _sim
+    res <- runDB $ selectList [VectorWord ==. input] []
+    case null res of
+        True -> return $ SearchResult []
+        False -> do
+            vecs <- runDB $ selectList [VectorWord !=. input] []
+            _sim <- return $ mostSim (f res ^. vectorVector) vecs
+            word <- return $ map (\(Entity _ x) -> x ^. vectorWord) vecs
+            return $ SearchResult $ (sortBy.flip) (comparing sim) $ filter (\x -> minSim < sim x) $ zipWith ResultWord word _sim
+    where
+        f ((Entity _ val):_) = val
 
 getVector Nothing =  return $ SearchResult []
 
