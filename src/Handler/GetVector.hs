@@ -23,9 +23,12 @@ getVector (Just input) = do
     vecs <- runDB $ selectList [VectorWord !=. input] []
     _sim <- return $ mostSim (center ^. vectorVector) vecs
     word <- return $ map (\(Entity _ x) -> x ^. vectorWord) vecs
-    return $ SearchResult $ (sortBy.flip) (comparing sim) $ zipWith ResultWord word _sim
+    return $ SearchResult $ (sortBy.flip) (comparing sim) $ filter (\x -> minSim < sim x) $ zipWith ResultWord word _sim
 
 getVector Nothing =  return $ SearchResult []
+
+minSim :: Double
+minSim = 0.3
 
 mostSim :: V.Vector Double -> [Entity Vector] -> [Double]
 mostSim _ [] = []
