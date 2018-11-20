@@ -5,11 +5,11 @@
 module Models.Post where
 
 import Control.Lens.TH
-import Data.Aeson hiding (decode)
+import Data.Aeson hiding (decode, encode)
 import Data.ByteString.Lazy
 import Data.ByteString.Base64.Lazy (decode)
 import Data.Text (Text)
-import Data.Text.Encoding (encodeUtf8)
+import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 import GHC.Generics (Generic(..))
 
 data FileInput = FileInput
@@ -23,7 +23,7 @@ data FileInput = FileInput
 makeLenses ''FileInput
 
 instance FromJSON ByteString where
-  parseJSON = withText "ByteString" $ either (fail "") pure . id . decode . fromStrict . encodeUtf8
+  parseJSON = withText "ByteString" $ either (fail "") pure . decode . fromStrict . encodeUtf8
   -- parseJSON (Text str) = pure $ (either (const "") id . decode . encodeUtf8 . pack) str
 
 instance FromJSON FileInput where
