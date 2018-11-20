@@ -1,10 +1,12 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DataKinds #-}
 
 module Models.Result where
 
-import GHC.Generics
 import Data.Aeson
 import Data.Text
+import GHC.Generics
+import Servant
 
 data SearchResult = SearchResult {
     result :: [ResultWord]
@@ -20,7 +22,12 @@ data ResultWord = ResultWord {
     , sim :: Double
 } deriving (Generic, Show)
 
-
 instance ToJSON SearchResult
 instance ToJSON ResultWord
 instance ToJSON ItemPostResult
+
+type LoginResult = Headers
+            '[Header "access_token" String
+            , Header "token_type" String
+            , Header "expires_in" String
+            , Header "refresh_token" String]

@@ -25,10 +25,7 @@ type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
 type VectorApi = "vector" :> QueryParam "search" Text :> Get '[JSON] SearchResult
 
 type LoginApi = "login" :> ReqBody '[JSON] User
-    :> Post '[JSON](Headers
-        '[Header "Authorization" String
-        , Header "Test2" String]
-    NoContent)
+    :> Post '[JSON] (LoginResult NoContent)
 
 api :: Proxy APP
 api = Proxy

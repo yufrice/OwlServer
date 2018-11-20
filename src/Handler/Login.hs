@@ -8,14 +8,18 @@ import qualified Data.Text as T
 import Servant
 
 import Model
+import Models.Result
 import Config
 import Utils
 
-login :: User -> Owl (Headers
-  '[Header "Authorization" String
-  , Header "Test2" String] NoContent)
+login :: User -> Owl (LoginResult NoContent)
 login user = do
-  res <- runDB $ selectList [UserIdent ==. user ^. userIdent] []
-  case Prelude.null res of
-    True -> return $ addHeader "Bearer <Token>" $ addHeader "v" $ NoContent
-    False -> return $ addHeader "a" $ addHeader "v" $ NoContent
+  res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
+  case res of
+    Nothing -> throwError $ err401
+    Just _ -> return
+      $ addHeader "token"
+      $ addHeader "Bearer"
+      $ addHeader "3600"
+      $ addHeader "token"
+      $ NoContent
