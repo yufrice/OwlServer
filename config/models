@@ -1,7 +1,12 @@
-User
+User json
     ident Text
     password Text
     UniqueUser ident
+
+Session
+    token Text
+    createdAt UTCTime
+    UniqueToken token
 
 Item json
     name Text

@@ -24,11 +24,9 @@ getVector (Just input) = do
         True -> return $ SearchResult []
         False -> do
             vecs <- runDB $ selectList [VectorWord !=. input] []
-            _sim <- return $ mostSim (f res ^. vectorVector) vecs
-            word <- return $ map (\(Entity _ x) -> x ^. vectorWord) vecs
-            return $ SearchResult $ (sortBy.flip) (comparing sim) $ filter (\x -> minSim < sim x) $ zipWith ResultWord word _sim
-    where
-        f ((Entity _ val):_) = val
+            _sim <- return $ mostSim ((^.) (entityVal $ head res) vectorVector) vecs
+            word <- return $ map ((^. vectorWord) . entityVal) vecs
+            return $ SearchResult $ (sortBy.flip) (comparing sim) $ filter ((minSim <) . sim) $ zipWith ResultWord word _sim
 
 getVector Nothing =  return $ SearchResult []
 

@@ -4,6 +4,7 @@
 module Config where
 
 import Control.Monad.Trans.Maybe
+import Control.Monad.Reader
 import Database.Persist.MongoDB
 import Data.Text
 import Data.Extensible

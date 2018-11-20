@@ -26,6 +26,7 @@ dependencies:
 - persistent-template
 - servant
 - servant-server
+- servant-multipart
 - template-haskell
 - transformers
 - text
@@ -43,6 +44,11 @@ dependencies:
 - base64-bytestring
 - vector
 - aeson
+- memory
+- filepath
+- directory
+- time
+- http-types
 
 library:
   source-dirs: src
@@ -68,3 +74,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - OwlServer
+    - hspec
+    - QuickCheck
+    - hspec-wai

@@ -1,5 +1,5 @@
 module Models.Vec where
 
-import qualified  Data.Vector as V
+import Data.Vector (Vector)
 
-type Vec = V.Vector Double
+type Vec = Vector Double

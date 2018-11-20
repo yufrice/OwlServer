@@ -13,8 +13,8 @@ module Model (
     , module Models.Vec
 ) where
 
-import Data.ByteString (ByteString)
 import Data.Text
+import Data.Time (UTCTime (..))
 import Database.Persist.Quasi
 import Database.Persist.MongoDB hiding (master)
 import Database.Persist.TH
@@ -26,9 +26,3 @@ import Utils
 
 share [mkPersist (mkPersistSettings (ConT ''MongoContext)){mpsGenerateLenses = True}]
   $(persistFileWith upperCaseSettings "config/models")
-
-data FileInput = FileInput
-  { name :: Text
-  , desc :: Text
-  , file :: ByteString
-  }

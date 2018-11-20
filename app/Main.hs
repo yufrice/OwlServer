@@ -1,3 +1,6 @@
+{- |
+Module  : Main
+-}
 {-# LANGUAGE OverloadedLabels #-}
 
 module Main (main) where
@@ -25,6 +28,7 @@ main = do
         putStrLn $ "start server listen:" ++ show (cfg ^. #listenPort)
         runSettings  settings $ app $ appConfig (cfg ^. #staticDir)
 
+-- | Created Database ConnectionPool
 makePool :: DbConfig -> IO ConnectionPool
 makePool config = createMongoDBPool name hostname port auth poolSize 5 3600
   where
