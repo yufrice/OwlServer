@@ -3,6 +3,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main (main) where
@@ -26,7 +27,7 @@ import Models.Post
 import Models.Result
 
 main :: IO ()
-main = Prelude.putStrLn $ markdown apiDoc
+main = writeFile "docs/API/index.md" $ markdown apiDoc
 
 apiDoc :: Servant.Docs.API
 apiDoc = docs api
@@ -44,25 +45,23 @@ instance ToJSON FileInput where
       ,"desc" .= desc ]
 
 
--- ToParam
-instance ToParam (QueryParams  "search" T.Text) where
-  toParam _ = DocQueryParam "search"
-                ["Word"]
-                "Search Item"
-                Normal
+-- Item
+instance ToParam (QueryParams "search" T.Text) where
+  toParam _ = DocQueryParam "search" ["word0", "word1", "wordN"] "Search Item" List
 
-instance ToParam (QueryParam' '[Optional, Strict] "search" T.Text) where
-  toParam _ = DocQueryParam "search"
-                ["Word"]
-                "Search Item"
-                Normal
+-- instance ToCapture (Capture "fileInput" FileInput) where
+--   toCapture _ = DocCapture "fileInput" "file input"
+
+-- Vector
+instance ToParam (QueryParam' '[Optional, Strict] "word" T.Text) where
+  toParam _ = DocQueryParam "word" ["word0", "word1", "wordN"] "Search Vector" Normal
 
 -- ToSample
 instance ToSample Char where
   toSamples _ = singleSample 'a'
 
 instance ToSample () where
-  toSamples _ = noSamples
+  toSamples _ = singleSample ()
 
 instance ToSample (Entity User) where
   toSamples _ = noSamples
@@ -88,12 +87,12 @@ instance ToSample (Entity Vector) where
 instance ToSample Vector where
   toSamples _ = noSamples
 
+-- sampleFile = FileInput "ItemName" "SearchWord" "FileFormat" "File" "Description"
 instance ToSample FileInput where
-  toSamples _ = singleSample
-    $ FileInput "ItemName" "SearchWord" "FileFormat" (Bl.fromStrict $ Te.encodeUtf8 "File") "Description"
-
-instance ToSample ResultWord where
-  toSamples _ = singleSample $ ResultWord "ResultWord" 1.0
+  toSamples _ = noSamples
+  -- toSamples _ = singleSample sampleFile
 
 instance ToSample SearchResult where
-  toSamples _ = singleSample $ SearchResult [ResultWord "ListResultWord" 0.1]
+  toSamples _ = singleSample $ SearchResult [
+    ResultWord "ResultWord0" 1.0
+    ,ResultWord "ResultWord1" 0.1]

@@ -22,7 +22,7 @@ type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
     :<|> Header "Authorization" Text
         :> "item" :> ReqBody '[JSON] FileInput
         :> Post '[JSON] ()
-type VectorApi = "vector" :> QueryParam "search" Text :> Get '[JSON] SearchResult
+type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
 type LoginApi = "login" :> ReqBody '[JSON] User
     :> Post '[JSON] (LoginResult NoContent)

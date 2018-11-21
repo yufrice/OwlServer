@@ -27,6 +27,7 @@ dependencies:
 - servant
 - servant-server
 - servant-multipart
+- servant-docs
 - template-haskell
 - transformers
 - text
@@ -63,9 +64,9 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - OwlServer
-  docs:
-    main:                docs/Main.hs
-    source-dirs:         app
+  ApiDocs:
+    main:                Main.hs
+    source-dirs:         app/api
     ghc-options:
     - -threaded
     - -rtsopts
