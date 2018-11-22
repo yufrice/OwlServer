@@ -52,6 +52,8 @@ login user = do
             )
 
 -- | Create a random token.
+-- >>> makeToken 10
+-- random token
 makeToken :: Int -> IO T.Text
 makeToken i = do
   seed <- getEntropy i

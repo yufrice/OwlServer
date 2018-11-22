@@ -57,6 +57,10 @@ postAddItem (Just token) input = case checkHeader $ T.words $ getToken token of
   item = (<*>) (flip . liftM2 Item (^. name) (^. word)) (^. desc)
 
 -- | Check and parse Bearer token.
+-- >> chechHeader ["Bearer", "token"]
+-- Just "token"
+-- >> chechHeader ["Other", "token"]
+-- Nothing
 checkHeader :: [T.Text] -> Maybe T.Text
 checkHeader [header, token] =
   if header == "Bearer" then Just token else Nothing

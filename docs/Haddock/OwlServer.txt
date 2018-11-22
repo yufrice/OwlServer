@@ -44,10 +44,11 @@ module Lib.VectorSim
 -- | uoo
 similarity :: Num a => Vector a -> Vector a -> a
 
--- | Calc Lp2 norm O(n) O(n)
+-- | Calc Lp2 norm O(n) O(n) &gt;&gt;&gt; l2Norm [1,2,3] sqrt 14
 l2Norm :: (Num a, Floating a) => Vector a -> a
 
--- | Calc dot product O(n) O(min(mn,n))
+-- | Calc dot product O(n) O(min(mn,n)) &gt;&gt;&gt; dotProduct [1,2,3]
+--   [3,2,1] 10
 dotProduct :: (Num a) => Vector a -> Vector a -> a
 
 module Models.Post
