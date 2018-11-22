@@ -1,15 +1,16 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Lib.Auth where
+module Lib.Auth
+  ( Authorization(..)
+  , errorResponseHeader
+  )
+where
 
 import           Data.Text
 import           GHC.Generics                   ( Generic )
 import           Servant.API                    ( FromHttpApiData(..) )
 import qualified Network.HTTP.Types            as N
-
-auth :: Int
-auth = 0
 
 newtype Authorization = Authorization { getToken :: Text }
   deriving (Read, Show, Eq, Ord, Generic)

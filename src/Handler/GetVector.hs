@@ -1,6 +1,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Handler.GetVector where
+module Handler.GetVector
+    ( getVector
+    )
+where
 
 import           Database.Persist.MongoDB
 import qualified Data.Text                     as T
@@ -15,7 +18,9 @@ import           Servant
 import           Api
 import           Model
 import           Config
-import           Models.Result
+import           Models.Result                  ( SearchResult(..)
+                                                , ResultWord(..)
+                                                )
 import           Lib.VectorSim
 import           Utils
 

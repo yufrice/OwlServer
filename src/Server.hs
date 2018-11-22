@@ -1,4 +1,9 @@
-module Server where
+module Server
+  ( app
+  )
+where
+
+-- | defining APIs
 
 import           Servant
 import           Servant.Server

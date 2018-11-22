@@ -1,4 +1,7 @@
-module Handler.GetItem where
+module Handler.GetItem
+  ( getItem
+  )
+where
 
 import           Database.Persist.MongoDB
 import qualified Data.Text                     as T

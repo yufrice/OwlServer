@@ -1,6 +1,3 @@
-{- |
-Module  : Main
--}
 {-# LANGUAGE OverloadedLabels #-}
 
 module Main
@@ -9,7 +6,7 @@ module Main
 where
 
 import           Control.Lens.Getter            ( (^.) )
-import           Data.Text
+import           Data.Text                      ( Text )
 import           Data.Yaml                      ( decodeFileEither
                                                 , prettyPrintParseException
                                                 , ParseException
@@ -21,7 +18,11 @@ import           Network.Wai.Handler.Warp
 import           Network.Wai.Logger             ( withStdoutLogger )
 
 import           Server
-import           Config
+import           Config                         ( AppConfig(..)
+                                                , Config
+                                                , DbConfig
+                                                , defaultConfigPath
+                                                )
 
 main :: IO ()
 main = do

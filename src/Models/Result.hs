@@ -1,7 +1,13 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DataKinds #-}
 
-module Models.Result where
+module Models.Result
+    ( SearchResult(..)
+    , ItemPostResult
+    , LoginResult
+    , ResultWord(..)
+    )
+where
 
 import           Data.Aeson
 import           Data.ByteString                ( ByteString )

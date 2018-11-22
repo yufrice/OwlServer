@@ -2,7 +2,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DataKinds #-}
 
-module Handler.AddItem where
+module Handler.AddItem
+  ( postAddItem
+  )
+where
 
 import           Control.Monad.Reader           ( asks
                                                 , ap
@@ -28,7 +31,9 @@ import           Api
 import           Model
 import           Models.Post
 import           Config
-import           Lib.Auth
+import           Lib.Auth                       ( Authorization(..)
+                                                , errorResponseHeader
+                                                )
 import           Utils
 
 postAddItem :: Maybe Authorization -> FileInput -> Owl ()

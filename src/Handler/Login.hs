@@ -1,7 +1,10 @@
 {-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Handler.Login where
+module Handler.Login
+  ( login
+  )
+where
 
 import           Control.Lens                   ( (^.) )
 import qualified Crypto.BCrypt                 as C

@@ -1,4 +1,7 @@
-module Models.Vec where
+module Models.Vec
+  ( Vec
+  )
+where
 
 import           Data.Vector                    ( Vector )
 

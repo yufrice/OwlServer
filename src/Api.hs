@@ -1,10 +1,15 @@
-{- |
-Module : Api
--}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Api where
+module Api
+    ( API
+    , APP
+    , api
+    , ItemApi
+    , Public
+    , VectorApi
+    )
+where
 
 import           Servant
 import           Data.Text

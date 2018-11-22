@@ -1,10 +1,14 @@
-{- |
-Module : Config
--}
 {-# LANGUAGE DataKinds     #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Config where
+module Config
+  ( AppConfig(..)
+  , Config
+  , DbConfig
+  , defaultConfigPath
+  , Owl
+  )
+where
 
 import           Control.Monad.Trans.Maybe
 import           Control.Monad.Reader           ( ReaderT )

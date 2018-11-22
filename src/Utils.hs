@@ -1,6 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Utils where
+module Utils
+  ( runDB
+  )
+where
 
 import           Control.Monad.Reader           ( asks
                                                 , liftIO
@@ -12,7 +15,7 @@ import           Control.Monad.Trans.Resource   ( ResourceT
                                                 )
 import           Database.Persist.MongoDB
 
-import           Config
+import           Config                         ( AppConfig(..) )
 
 type MongoPersistM = Action (ResourceT IO)
 
