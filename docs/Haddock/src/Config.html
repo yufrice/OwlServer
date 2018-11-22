@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE DataKinds     #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE TypeOperators #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Config</span><span>
+</span><a name="line-5"></a><span>  </span><span class="hs-special">(</span><span> </span><a href="Config.html#AppConfig"><span class="hs-identifier hs-type">AppConfig</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-6"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Config.html#Config"><span class="hs-identifier hs-type">Config</span></a><span>
+</span><a name="line-7"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Config.html#DbConfig"><span class="hs-identifier hs-type">DbConfig</span></a><span>
+</span><a name="line-8"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Config.html#defaultConfigPath"><span class="hs-identifier hs-var">defaultConfigPath</span></a><span>
+</span><a name="line-9"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Config.html#Owl"><span class="hs-identifier hs-type">Owl</span></a><span>
+</span><a name="line-10"></a><span>  </span><span class="hs-special">)</span><span>
+</span><a name="line-11"></a><span class="hs-keyword">where</span><span>
+</span><a name="line-12"></a><span>
+</span><a name="line-13"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Control.Monad.Trans.Maybe</span><span>
+</span><a name="line-14"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Control.Monad.Reader</span><span>           </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">ReaderT</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-15"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Database.Persist.MongoDB</span><span>
+</span><a name="line-16"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.Text</span><span>
+</span><a name="line-17"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.Extensible</span><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Network</span><span>                        </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">PortID</span><span class="hs-special">(</span><span class="hs-identifier hs-var">PortNumber</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Network.Wai.Handler.Warp</span><span>       </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">Port</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-20"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Servant</span><span>                        </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">Handler</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-comment">-- ^ Wrap Handler in ReadMonad.</span><span>
+</span><a name="line-23"></a><span class="hs-keyword">type</span><span> </span><a name="Owl"><a href="Config.html#Owl"><span class="hs-identifier">Owl</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">ReaderT</span><span> </span><a href="Config.html#AppConfig"><span class="hs-identifier hs-type">AppConfig</span></a><span> </span><span class="hs-identifier hs-type">Handler</span><span>
+</span><a name="line-24"></a><span>
+</span><a name="line-25"></a><span class="hs-comment">-- ^ Context Settings.</span><span>
+</span><a name="line-26"></a><span class="hs-keyword">data</span><span> </span><a name="AppConfig"><a href="Config.html#AppConfig"><span class="hs-identifier">AppConfig</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="AppConfig"><a href="Config.html#AppConfig"><span class="hs-identifier">AppConfig</span></a></a><span>
+</span><a name="line-27"></a><span>    </span><span class="hs-special">{</span><span> </span><a name="getPool"><a href="Config.html#getPool"><span class="hs-identifier">getPool</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">ConnectionPool</span><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-special">,</span><span> </span><a name="staticDir"><a href="Config.html#staticDir"><span class="hs-identifier">staticDir</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">FilePath</span><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-special">}</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span class="hs-comment">-- ^ General configs.</span><span>
+</span><a name="line-32"></a><span class="hs-keyword">type</span><span> </span><a name="Config"><a href="Config.html#Config"><span class="hs-identifier">Config</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">Record</span><span>
+</span><a name="line-33"></a><span>  </span><span class="hs-special">'</span><span class="hs-special">[</span><span> </span><span class="hs-string">&quot;listenPort&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">Port</span><span>
+</span><a name="line-34"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;staticDir&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">FilePath</span><span>
+</span><a name="line-35"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;database&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><a href="Config.html#DbConfig"><span class="hs-identifier hs-type">DbConfig</span></a><span>
+</span><a name="line-36"></a><span>  </span><span class="hs-special">]</span><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span class="hs-comment">-- ^ Database Configs.</span><span>
+</span><a name="line-39"></a><span class="hs-keyword">type</span><span> </span><a name="DbConfig"><a href="Config.html#DbConfig"><span class="hs-identifier">DbConfig</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">Record</span><span>
+</span><a name="line-40"></a><span>  </span><span class="hs-special">'</span><span class="hs-special">[</span><span> </span><span class="hs-string">&quot;name&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">Database</span><span>
+</span><a name="line-41"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;host&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">HostName</span><span>
+</span><a name="line-42"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;user&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">Text</span><span>
+</span><a name="line-43"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;pass&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">Text</span><span>
+</span><a name="line-44"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-string">&quot;poolSize&quot;</span><span> </span><span class="hs-operator hs-type">&gt;:</span><span> </span><span class="hs-identifier hs-type">Int</span><span>
+</span><a name="line-45"></a><span>  </span><span class="hs-special">]</span><span>
+</span><a name="line-46"></a><span>
+</span><a name="line-47"></a><span class="hs-comment">-- ^ Config file path.</span><span>
+</span><a name="line-48"></a><span class="hs-identifier">defaultConfigPath</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">FilePath</span><span>
+</span><a name="line-49"></a><a name="defaultConfigPath"><a href="Config.html#defaultConfigPath"><span class="hs-identifier">defaultConfigPath</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-string">&quot;config/settings.yaml&quot;</span><span>
+</span><a name="line-50"></a></pre></body></html>
