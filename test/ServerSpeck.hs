@@ -1,9 +1,11 @@
-module ServerSpeck (spec) where
+module ServerSpeck
+  ( spec
+  )
+where
 
 
-import Server
-import Test.Hspec
+import           Server
+import           Test.Hspec
 
 spec :: Spec
-spec = describe "app" $ do
-  error "not implemented"
+spec = describe "app" $ error "not implemented"

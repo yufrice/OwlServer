@@ -6,25 +6,28 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Main (main) where
+module Main
+  ( main
+  )
+where
 
-import Data.Aeson hiding(encode)
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Lazy as Bl
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as Te
-import Data.Int
-import Data.Proxy
-import Database.Persist
-import Database.Persist.MongoDB
-import Servant
-import Servant.Docs
+import           Data.Aeson              hiding ( encode )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Lazy          as Bl
+import qualified Data.Text                     as T
+import qualified Data.Text.Encoding            as Te
+import           Data.Int
+import           Data.Proxy
+import           Database.Persist
+import           Database.Persist.MongoDB
+import           Servant
+import           Servant.Docs
 
-import Api
-import Config
-import Model
-import Models.Post
-import Models.Result
+import           Api
+import           Config
+import           Model
+import           Models.Post
+import           Models.Result
 
 main :: IO ()
 main = writeFile "docs/API/index.md" $ markdown apiDoc

@@ -1,31 +1,39 @@
+{- |
+Module : Api
+-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Api where
 
-import Servant
-import Data.Text
-import Data.ByteString
-import Database.Persist.MongoDB (Entity)
+import           Servant
+import           Data.Text
+import           Data.ByteString
+import           Database.Persist.MongoDB       ( Entity )
 
-import Model
-import Models.Result
-import Models.Post
-import Lib.Auth
+import           Model
+import           Models.Result
+import           Models.Post
+import           Lib.Auth
 
+-- | API end point
 type API = ItemApi
     :<|> VectorApi
 
 type  APP = "api" :> API :<|> Public
 type Public = "api" :> LoginApi :<|> Raw
 
+-- | Get: Search Item , Post: Add Item
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
     :<|> "item"
         :> Header "Authorization" Authorization
         :> ReqBody '[JSON] FileInput
         :> Post '[JSON] ()
+
+-- | Get: Search Word Vector
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
+-- | Post: Login response access token
 type LoginApi = "login" :> ReqBody '[JSON] User
     :> Post '[JSON] (LoginResult NoContent)
 

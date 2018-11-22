@@ -4,13 +4,17 @@
 
 module Models.Post where
 
-import Control.Lens.TH
-import Data.Aeson hiding (decode, encode)
-import Data.ByteString.Lazy
-import Data.ByteString.Base64.Lazy (decode)
-import Data.Text (Text)
-import Data.Text.Encoding (encodeUtf8, decodeUtf8)
-import GHC.Generics (Generic(..))
+import           Control.Lens.TH
+import           Data.Aeson              hiding ( decode
+                                                , encode
+                                                )
+import           Data.ByteString.Lazy
+import           Data.ByteString.Base64.Lazy    ( decode )
+import           Data.Text                      ( Text )
+import           Data.Text.Encoding             ( encodeUtf8
+                                                , decodeUtf8
+                                                )
+import           GHC.Generics                   ( Generic(..) )
 
 data FileInput = FileInput
   { _name :: Text

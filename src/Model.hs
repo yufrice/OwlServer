@@ -7,23 +7,29 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module Model (
-    module Model
+module Model
+    ( module Model
     , module Models.Vec
-) where
+    )
+where
 
-import Data.Aeson hiding (decode, encode)
-import Data.ByteString (ByteString)
-import Data.Text
-import Data.Text.Encoding (decodeUtf8, encodeUtf8)
-import Data.Time (UTCTime (..))
-import Database.Persist.Quasi
-import Database.Persist.MongoDB hiding (master)
-import Database.Persist.TH
-import Servant
-import Language.Haskell.TH.Syntax
-import Models.Vec
-import Utils
+import           Data.Aeson              hiding ( decode
+                                                , encode
+                                                )
+import           Data.ByteString                ( ByteString )
+import           Data.Text
+import           Data.Text.Encoding             ( decodeUtf8
+                                                , encodeUtf8
+                                                )
+import           Data.Time                      ( UTCTime(..) )
+import           Database.Persist.Quasi
+import           Database.Persist.MongoDB
+                                         hiding ( master )
+import           Database.Persist.TH
+import           Servant
+import           Language.Haskell.TH.Syntax
+import           Models.Vec
+import           Utils
 
 instance ToJSON ByteString where
   toJSON =  toJSON . decodeUtf8

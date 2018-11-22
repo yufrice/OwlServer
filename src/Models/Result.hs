@@ -3,15 +3,15 @@
 
 module Models.Result where
 
-import Data.Aeson
-import Data.ByteString (ByteString)
-import Data.Text.Encoding (decodeUtf8)
-import Data.Text
-import GHC.Generics
-import Servant
-import Servant.API (ToHttpApiData(..))
+import           Data.Aeson
+import           Data.ByteString                ( ByteString )
+import           Data.Text.Encoding             ( decodeUtf8 )
+import           Data.Text
+import           GHC.Generics
+import           Servant
+import           Servant.API                    ( ToHttpApiData(..) )
 
-data SearchResult = SearchResult {
+newtype SearchResult = SearchResult {
     result :: [ResultWord]
 } deriving (Generic, Show)
 

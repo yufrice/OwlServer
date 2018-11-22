@@ -2,11 +2,17 @@
 
 module Utils where
 
-import Control.Monad.Reader (asks, liftIO, MonadIO, MonadReader)
-import Control.Monad.Trans.Resource (ResourceT, runResourceT)
-import Database.Persist.MongoDB
+import           Control.Monad.Reader           ( asks
+                                                , liftIO
+                                                , MonadIO
+                                                , MonadReader
+                                                )
+import           Control.Monad.Trans.Resource   ( ResourceT
+                                                , runResourceT
+                                                )
+import           Database.Persist.MongoDB
 
-import Config
+import           Config
 
 type MongoPersistM = Action (ResourceT IO)
 
