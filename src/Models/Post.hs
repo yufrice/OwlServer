@@ -23,7 +23,7 @@ data FileInput = FileInput
 makeLenses ''FileInput
 
 instance FromJSON ByteString where
-  parseJSON = withText "ByteString" $ either (fail "") pure . decode . fromStrict . encodeUtf8
+  parseJSON = withText "ByteString.Lazy" $ either (fail "") pure . decode . fromStrict . encodeUtf8
   -- parseJSON (Text str) = pure $ (either (const "") id . decode . encodeUtf8 . pack) str
 
 instance FromJSON FileInput where

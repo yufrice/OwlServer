@@ -41,6 +41,8 @@ dependencies:
 - lens
 - resourcet
 - cryptonite
+- bcrypt
+- entropy
 - bytestring
 - base64-bytestring
 - vector

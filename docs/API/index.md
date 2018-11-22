@@ -29,9 +29,9 @@
 
 - Example (`application/json;charset=utf-8`, `application/json`):
 
-```javascript
+    ```javascript
 []
-```
+    ```
 
 ## POST /api/item
 
@@ -58,9 +58,9 @@
 
 - Example (`application/json;charset=utf-8`, `application/json`):
 
-```javascript
+    ```javascript
 []
-```
+    ```
 
 ## POST /api/login
 
@@ -73,14 +73,14 @@
 
 - Example (`application/json;charset=utf-8`, `application/json`):
 
-```javascript
+    ```javascript
 {"password":"Password","ident":"Identity"}
-```
+    ```
 
 ### Response:
 
 - Status code 200
-- Headers: [("access_token",""),("token_type",""),("expires_in",""),("refresh_token","")]
+- Headers: [("access_token","test"),("token_type","test"),("expires_in","0"),("refresh_token","test")]
 
 - Supported content types are:
 
@@ -89,9 +89,9 @@
 
 - Example (`application/json;charset=utf-8`, `application/json`):
 
-```javascript
+    ```javascript
 
-```
+    ```
 
 ## GET /api/vector
 
@@ -114,7 +114,7 @@
 
 - Example (`application/json;charset=utf-8`, `application/json`):
 
-```javascript
+    ```javascript
 {"result":[{"sim":1,"word":"ResultWord0"},{"sim":0.1,"word":"ResultWord1"}]}
-```
+    ```
 

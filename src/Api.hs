@@ -11,6 +11,7 @@ import Database.Persist.MongoDB (Entity)
 import Model
 import Models.Result
 import Models.Post
+import Lib.Auth
 
 type API = ItemApi
     :<|> VectorApi
@@ -19,8 +20,9 @@ type  APP = "api" :> API :<|> Public
 type Public = "api" :> LoginApi :<|> Raw
 
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
-    :<|> Header "Authorization" Text
-        :> "item" :> ReqBody '[JSON] FileInput
+    :<|> "item"
+        :> Header "Authorization" Authorization
+        :> ReqBody '[JSON] FileInput
         :> Post '[JSON] ()
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 

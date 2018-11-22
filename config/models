@@ -1,6 +1,6 @@
 User json
     ident Text
-    password Text
+    password ByteString
     UniqueUser ident
 
 Session

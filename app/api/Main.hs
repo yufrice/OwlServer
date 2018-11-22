@@ -8,7 +8,7 @@
 
 module Main (main) where
 
-import Data.Aeson
+import Data.Aeson hiding(encode)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as Bl
 import qualified Data.Text as T
@@ -34,7 +34,7 @@ apiDoc = docs api
 
 -- ToJson
 instance ToJSON Bl.ByteString where
-  toJSON = object . return . ("ByteString" .=) . encode
+  toJSON = toJSON . Te.decodeUtf8 . Bl.toStrict
 
 instance ToJSON FileInput where
   toJSON (FileInput name word format file desc) = object[
@@ -57,11 +57,20 @@ instance ToParam (QueryParam' '[Optional, Strict] "word" T.Text) where
   toParam _ = DocQueryParam "word" ["word0", "word1", "wordN"] "Search Vector" Normal
 
 -- ToSample
+instance ToSample () where
+  toSamples _ = singleSample ()
+
 instance ToSample Char where
   toSamples _ = singleSample 'a'
 
-instance ToSample () where
-  toSamples _ = singleSample ()
+instance ToSample Int where
+  toSamples _ = singleSample 0
+
+instance ToSample B.ByteString where
+  toSamples _ = singleSample "test"
+
+instance ToSample T.Text where
+  toSamples _ = singleSample "test"
 
 instance ToSample (Entity User) where
   toSamples _ = noSamples

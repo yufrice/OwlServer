@@ -18,19 +18,19 @@ import Servant.Multipart
 import System.FilePath
 import System.IO
 import System.Directory
-import qualified Network.HTTP.Types as N
 
 import Api
 import Model
 import Models.Post
 import Config
+import Lib.Auth
 import Utils
 
-postAddItem :: Maybe T.Text -> FileInput -> Owl ()
+postAddItem :: Maybe Authorization  -> FileInput -> Owl ()
 postAddItem Nothing _ = throwError $ err400 { errBody = "invalid_request"
                                             , errHeaders = [errorResponseHeader] }
 postAddItem (Just token) input = do
-  case checkHeader $ T.words token of
+  case checkHeader $ T.words  $ getToken token of
     Nothing -> throwError err400 { errBody =  "invalid_request."
                                  , errHeaders = [errorResponseHeader] }
     Just token -> do
@@ -44,9 +44,6 @@ postAddItem (Just token) input = do
   where
     item :: FileInput -> T.Text -> Item
     item = (<*>) (flip . liftM2 Item (^. name) (^. word)) (^. desc)
-
-errorResponseHeader :: N.Header
-errorResponseHeader = ("WWW-Authenticate", "Basic realm=\"\"")
 
 checkHeader :: [T.Text] -> Maybe T.Text
 checkHeader [header, token] = if header == "Bearer" then Just token else Nothing

@@ -7,3 +7,7 @@ database:
   user: "Owl"
   pass: "Owl"
   poolSize: 10
+
+auth:
+  bCryptCost: 14
+  tokenExpirationTime: 3600

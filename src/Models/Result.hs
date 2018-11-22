@@ -4,9 +4,12 @@
 module Models.Result where
 
 import Data.Aeson
+import Data.ByteString (ByteString)
+import Data.Text.Encoding (decodeUtf8)
 import Data.Text
 import GHC.Generics
 import Servant
+import Servant.API (ToHttpApiData(..))
 
 data SearchResult = SearchResult {
     result :: [ResultWord]
@@ -27,7 +30,10 @@ instance ToJSON ResultWord
 instance ToJSON ItemPostResult
 
 type LoginResult = Headers
-            '[Header "access_token" String
-            , Header "token_type" String
-            , Header "expires_in" String
-            , Header "refresh_token" String]
+            '[Header "access_token" Text
+            , Header "token_type" ByteString
+            , Header "expires_in" Int
+            , Header "refresh_token" ByteString]
+
+instance ToHttpApiData ByteString where
+    toQueryParam = decodeUtf8
