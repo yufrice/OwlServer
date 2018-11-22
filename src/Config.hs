@@ -44,6 +44,7 @@ type DbConfig = Record
   , "poolSize" >: Int
   ]
 
--- ^ Config file path.
+-- ^
+-- Config file path.
 defaultConfigPath :: FilePath
 defaultConfigPath = "config/settings.yaml"

@@ -56,9 +56,12 @@ postAddItem (Just token) input = case checkHeader $ T.words $ getToken token of
   item :: FileInput -> T.Text -> Item
   item = (<*>) (flip . liftM2 Item (^. name) (^. word)) (^. desc)
 
--- | Check and parse Bearer token.
+-- |
+-- Check and parse Bearer token.
+-- 
 -- >> chechHeader ["Bearer", "token"]
 -- Just "token"
+--
 -- >> chechHeader ["Other", "token"]
 -- Nothing
 checkHeader :: [T.Text] -> Maybe T.Text
@@ -66,7 +69,8 @@ checkHeader [header, token] =
   if header == "Bearer" then Just token else Nothing
 checkHeader _ = Nothing
 
--- | Write input image.
+-- |
+-- Write input image.
 writeImage :: FileInput -> IO T.Text
 writeImage input = do
   pwd <- getCurrentDirectory

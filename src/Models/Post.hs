@@ -16,7 +16,8 @@ import           Data.Text.Encoding             ( encodeUtf8
                                                 )
 import           GHC.Generics                   ( Generic(..) )
 
--- ^ Post file form.
+-- ^
+-- Post file form.
 data FileInput = FileInput
   { _name :: Text
   , _word :: Text

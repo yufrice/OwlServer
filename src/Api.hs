@@ -21,16 +21,19 @@ import           Models.Result
 import           Models.Post
 import           Lib.Auth
 
--- ^ API endpoints.
+-- ^
+-- API endpoints.
 type API = ItemApi
     :<|> VectorApi
 
 type  APP = "api" :> API :<|> Public
 
--- ^ Public endpoints.
+-- ^
+-- Public endpoints.
 type Public = "api" :> LoginApi :<|> Raw
 
--- ^ Get Search Items. 
+-- ^
+-- Get Search Items. 
 -- Post Add Item.
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
     :<|> "item"
@@ -38,10 +41,12 @@ type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
         :> ReqBody '[JSON] FileInput
         :> Post '[JSON] ()
 
--- ^ Get Search Word Vector.
+-- ^
+-- Get Search Word Vector.
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
--- ^ Post Login
+-- ^
+-- Post Login
 -- response access token.
 type LoginApi = "login" :> ReqBody '[JSON] User
     :> Post '[JSON] (LoginResult NoContent)

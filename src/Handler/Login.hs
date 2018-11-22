@@ -51,7 +51,9 @@ login user = do
                 $ addHeader "not implemented" NoContent
             )
 
--- | Create a random token.
+-- |
+-- Create a random token.
+-- 
 -- >>> makeToken 10
 -- random token
 makeToken :: Int -> IO T.Text
