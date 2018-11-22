@@ -26,7 +26,6 @@ dependencies:
 - persistent-template
 - servant
 - servant-server
-- servant-multipart
 - servant-docs
 - template-haskell
 - transformers
