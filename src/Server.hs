@@ -3,15 +3,11 @@ module Server
   )
 where
 
--- | defining APIs
-
-import           Servant
-import           Servant.Server
-import           Servant.Server.StaticFiles
 import           Control.Monad.Reader           ( ReaderT
                                                 , runReaderT
                                                 )
 import           Database.Persist.MongoDB       ( ConnectionPool )
+import           Servant
 
 import           Api
 import           Config

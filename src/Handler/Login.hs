@@ -51,6 +51,7 @@ login user = do
                 $ addHeader "not implemented" NoContent
             )
 
+-- | Create a random token.
 makeToken :: Int -> IO T.Text
 makeToken i = do
   seed <- getEntropy i

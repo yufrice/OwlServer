@@ -19,6 +19,7 @@ import           Config                         ( AppConfig(..) )
 
 type MongoPersistM = Action (ResourceT IO)
 
+-- | Connecting Database Utility.
 runDB :: (MonadReader AppConfig m, MonadIO m) => MongoPersistM a -> m a
 runDB query = do
   pool <- asks getPool

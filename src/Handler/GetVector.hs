@@ -44,9 +44,11 @@ getVector (Just input) = do
 
 getVector Nothing = return $ SearchResult []
 
+-- | Filtering minimum similarity.
 minSim :: Double
 minSim = 0.3
 
+-- | Mapping vector from lists.
 mostSim :: V.Vector Double -> [Entity Vector] -> [Double]
 mostSim _ [] = []
 mostSim center (Entity _ vec : xs) =
