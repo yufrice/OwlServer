@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Server
   ( app
   )
@@ -11,10 +13,14 @@ import           Servant
 
 import           Api
 import           Config
+import           Data.Maybe                     ( mapMaybe )
 import           Handler.GetItem
 import           Handler.AddItem
 import           Handler.GetVector
 import           Handler.Login
+import           Network.Wai.Application.Static
+import           WaiAppStatic.Types
+import           Network.Wai.Middleware.Vhost   ( redirectTo )
 
 app :: AppConfig -> Application
 app env = serve api $ hoistServer api (`runReaderT` env) server
@@ -35,7 +41,16 @@ vectorApi :: ServerT VectorApi Owl
 vectorApi = getVector
 
 static :: ServerT Raw Owl
-static = serveDirectoryFileServer "../owl-webapp/build"
+static = serveDirectoryWith $ staticConfig "../owl-webapp/build"
+
+staticConfig :: FilePath -> StaticSettings
+staticConfig path = (defaultFileServerSettings path)
+  { ssIndices          = mapMaybe toPiece ["index.html"]
+  , ssAddTrailingSlash = True
+  , ss404Handler       = Just redirectHome
+  }
+redirectHome :: Application
+redirectHome _ sendResponse = sendResponse $ redirectTo "/"
 
 type AppServer api = ServerT api AppHandler
 type AppHandler = ReaderT ConnectionPool Handler
