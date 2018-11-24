@@ -1,14 +1,14 @@
-name:                OwlServer
-version:             0.1.0.0
-github:              "Owl/OwlServer"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+name: OwlServer
+version: 0.1.0.0
+github: "Owl/OwlServer"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2018 Author name here"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+  - README.md
+  - ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,75 +17,77 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/OwlServer#readme>
+description: Please see the README on GitHub at <https://github.com/githubuser/OwlServer#readme>
 
 dependencies:
-- base >= 4.7 && < 5
-- persistent
-- persistent-mongoDB
-- persistent-template
-- servant
-- servant-server
-- servant-docs
-- template-haskell
-- transformers
-- text
-- network
-- mtl
-- wai
-- wai-logger
-- warp
-- extensible
-- yaml
-- lens
-- resourcet
-- cryptonite
-- bcrypt
-- entropy
-- bytestring
-- base64-bytestring
-- vector
-- aeson
-- memory
-- filepath
-- directory
-- time
-- http-types
+  - base >= 4.7 && < 5
+  - persistent
+  - persistent-mongoDB
+  - persistent-template
+  - servant
+  - servant-server
+  - servant-docs
+  - template-haskell
+  - transformers
+  - text
+  - network
+  - mtl
+  - wai
+  - wai-logger
+  - wai-extra
+  - wai-app-static
+  - warp
+  - extensible
+  - yaml
+  - lens
+  - resourcet
+  - cryptonite
+  - bcrypt
+  - entropy
+  - bytestring
+  - base64-bytestring
+  - vector
+  - aeson
+  - memory
+  - filepath
+  - directory
+  - time
+  - http-types
 
 library:
   source-dirs: src
 
 executables:
   OwlServer:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - OwlServer
+      - OwlServer
   ApiDocs:
-    main:                Main.hs
-    source-dirs:         app/api
+    main: Main.hs
+    source-dirs: app/api
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - OwlServer
-    - servant-docs
+      - OwlServer
+      - servant-docs
 
 tests:
   OwlServer-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - OwlServer
-    - hspec
-    - QuickCheck
-    - hspec-wai
+      - OwlServer
+      - hspec
+      - QuickCheck
+      - hspec-wai
