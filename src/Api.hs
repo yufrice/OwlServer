@@ -6,6 +6,7 @@ module Api
     , APP
     , api
     , ItemApi
+    , LoginApi
     , Public
     , VectorApi
     )
@@ -48,7 +49,8 @@ type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 -- ^
 -- Post Login
 -- response access token.
-type LoginApi = "login" :> ReqBody '[JSON] User
+type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] ()
+    :<|> "login" :> ReqBody '[JSON] User
     :> Post '[JSON] (LoginResult NoContent)
 
 api :: Proxy APP

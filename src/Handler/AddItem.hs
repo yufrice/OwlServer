@@ -32,42 +32,19 @@ import           Model
 import           Models.Post
 import           Config
 import           Lib.Auth                       ( Authorization(..)
-                                                , errorResponseHeader
+                                                , auth
                                                 )
 import           Utils
 
 postAddItem :: Maybe Authorization -> FileInput -> Owl ()
-postAddItem Nothing _ = throwError
-  $ err400 { errBody = "invalid_request", errHeaders = [errorResponseHeader] }
-postAddItem (Just token) input = case checkHeader $ T.words $ getToken token of
-  Nothing -> throwError err400 { errBody    = "invalid_request."
-                               , errHeaders = [errorResponseHeader]
-                               }
-  Just token -> do
-    res <- runDB $ selectFirst [SessionToken ==. token] []
-    case res of
-      Nothing -> throwError err401 { errBody    = "invalid_token"
-                                   , errHeaders = [errorResponseHeader]
-                                   }
-      Just _ -> do
-        img <- liftIO $ writeImage input
-        runDB (insert $ item input img) >> return ()
+postAddItem token input = case return $ auth token of
+  Left  err -> throwError err
+  Right _   -> do
+    img <- liftIO $ writeImage input
+    runDB (insert $ item input img) >> return ()
  where
   item :: FileInput -> T.Text -> Item
   item = (<*>) (flip . liftM2 Item (^. name) (^. word)) (^. desc)
-
--- |
--- Check and parse Bearer token.
--- 
--- >> chechHeader ["Bearer", "token"]
--- Just "token"
---
--- >> chechHeader ["Other", "token"]
--- Nothing
-checkHeader :: [T.Text] -> Maybe T.Text
-checkHeader [header, token] =
-  if header == "Bearer" then Just token else Nothing
-checkHeader _ = Nothing
 
 -- |
 -- Write input image.

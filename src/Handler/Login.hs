@@ -2,7 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Handler.Login
-  ( login
+  ( postLogin
+  , getLogin
   )
 where
 
@@ -21,10 +22,16 @@ import           System.Entropy
 import           Model
 import           Models.Result
 import           Config
+import           Lib.Auth
 import           Utils
 
-login :: User -> Owl (LoginResult NoContent)
-login user = do
+getLogin :: Maybe Authorization -> Owl ()
+getLogin token = case return $ auth token of
+  Left  err -> throwError err
+  Right _   -> return ()
+
+postLogin :: User -> Owl (LoginResult NoContent)
+postLogin user = do
   res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
   case res of
     Nothing -> throwError err401

@@ -31,6 +31,9 @@ server = endApi :<|> public
 public :: ServerT Public Owl
 public = login :<|> static
 
+login :: ServerT LoginApi Owl
+login = getLogin :<|> postLogin
+
 endApi :: ServerT API Owl
 endApi = itemApi :<|> vectorApi
 
