@@ -35,28 +35,21 @@ postLogin user = do
   res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
   case res of
     Nothing -> throwError err401
-    Just r  -> do
-      hash <-
-        liftIO
-        $  C.hashPasswordUsingPolicy C.slowerBcryptHashingPolicy
-        $  user
-        ^. userPassword
-      case hash of
-        Nothing -> throwError err401
-        Just h  -> if C.validatePassword h $ entityVal r ^. userPassword
-          then throwError err401
-          else
-            (do
-              token <- liftIO $ makeToken 5
-              time  <- liftIO DT.getCurrentTime
-              let session = Session token time
-              runDB $ insert session
-              return
-                $ addHeader token
-                $ addHeader "Bearer"
-                $ addHeader 3600
-                $ addHeader "not implemented" NoContent
-            )
+    Just r  ->
+      if C.validatePassword (entityVal r ^. userPassword) $ user ^. userPassword
+        then
+          (do
+            token <- liftIO $ makeToken 5
+            time  <- liftIO DT.getCurrentTime
+            let session = Session token time
+            runDB $ insert session
+            return
+              $ addHeader token
+              $ addHeader "Bearer"
+              $ addHeader 3600
+              $ addHeader "not implemented" NoContent
+          )
+        else throwError err401
 
 -- |
 -- Create a random token.
