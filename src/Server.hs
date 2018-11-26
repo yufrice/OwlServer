@@ -29,7 +29,7 @@ server :: ServerT APP Owl
 server = endApi :<|> public
 
 public :: ServerT Public Owl
-public = login :<|> static
+public = login :<|> img :<|> static
 
 login :: ServerT LoginApi Owl
 login = getLogin :<|> postLogin
@@ -43,8 +43,11 @@ itemApi = getItem :<|> postAddItem
 vectorApi :: ServerT VectorApi Owl
 vectorApi = getVector
 
+img :: ServerT Raw Owl
+img = serveDirectoryFileServer "./static/img"
+
 static :: ServerT Raw Owl
-static = serveDirectoryWith $ staticConfig "../owl-webapp/build"
+static = serveDirectoryWith $ staticConfig "./static"
 
 staticConfig :: FilePath -> StaticSettings
 staticConfig path = (defaultFileServerSettings path)

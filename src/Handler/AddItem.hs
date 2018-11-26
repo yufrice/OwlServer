@@ -41,7 +41,7 @@ postAddItem token input = case return $ auth token of
   Left  err -> throwError err
   Right _   -> do
     img <- liftIO $ writeImage input
-    runDB (insert $ item input img) >> return ()
+    runDB (insert $ item input (T.append "img/" img)) >> return ()
  where
   item :: FileInput -> T.Text -> Item
   item = (<*>) (flip . liftM2 Item (^. name) (^. word)) (^. desc)
@@ -52,7 +52,7 @@ writeImage :: FileInput -> IO T.Text
 writeImage input = do
   pwd <- getCurrentDirectory
   let hash = (++) (show $ h $ input ^. file) $ T.unpack $ input ^. format
-  openFile (pwd </> "static" </> hash) WriteMode
+  openFile (pwd </> "static/img" </> hash) WriteMode
     >>= (\m -> LB.hPut m (input ^. file) >> hClose m)
   return $ T.pack hash
  where

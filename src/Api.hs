@@ -31,7 +31,7 @@ type  APP = "api" :> API :<|> Public
 
 -- ^
 -- Public endpoints.
-type Public = "api" :> LoginApi :<|> Raw
+type Public = "api" :> LoginApi :<|> "img" :> Raw :<|> Raw
 
 -- ^
 -- Get Search Items. 
