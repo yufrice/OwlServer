@@ -26,19 +26,16 @@ dependencies:
   - persistent-template
   - servant
   - servant-server
-  - servant-docs
   - template-haskell
   - transformers
   - text
   - network
   - mtl
   - wai
-  - wai-logger
   - wai-extra
   - wai-app-static
   - warp
   - extensible
-  - yaml
   - lens
   - resourcet
   - cryptonite
@@ -70,6 +67,8 @@ executables:
       - -fno-warn-unused-imports
     dependencies:
       - OwlServer
+      - wai-logger
+      - yaml
   ApiDocs:
     main: Main.hs
     source-dirs: app/api

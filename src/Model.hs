@@ -29,7 +29,6 @@ import           Database.Persist.TH
 import           Servant
 import           Language.Haskell.TH.Syntax
 import           Models.Vec
-import           Utils
 
 instance ToJSON ByteString where
   toJSON =  toJSON . decodeUtf8

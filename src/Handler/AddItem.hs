@@ -27,7 +27,6 @@ import           System.FilePath
 import           System.IO
 import           System.Directory
 
-import           Api
 import           Model
 import           Models.Post
 import           Config

@@ -15,7 +15,6 @@ import           Data.List                      ( null
 import           Control.Lens                   ( (^.) )
 import           Servant
 
-import           Api
 import           Model
 import           Config
 import           Models.Result                  ( SearchResult(..)

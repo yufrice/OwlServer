@@ -7,7 +7,6 @@ import           Database.Persist.MongoDB
 import qualified Data.Text                     as T
 import           Servant
 
-import           Api
 import           Model
 import           Config
 import           Utils
