@@ -34,7 +34,7 @@ server :: ServerT APP Owl
 server = endApi :<|> public
 
 public :: ServerT Public Owl
-public = login
+public = login :<|> img
 
 login :: ServerT LoginApi Owl
 login = getLogin :<|> postLogin
