@@ -14,7 +14,6 @@ where
 
 import           Servant
 import           Data.Text
-import           Data.ByteString
 import           Database.Persist.MongoDB       ( Entity )
 
 import           Model
@@ -22,18 +21,20 @@ import           Models.Result
 import           Models.Post
 import           Lib.Auth
 
--- ^
--- API endpoints.
+-- |
+-- APP endpoint.
+type  APP = "api" :> API :<|> Public
+
+-- |
+-- API endpoint.
 type API = ItemApi
     :<|> VectorApi
 
-type  APP = "api" :> API :<|> Public
-
--- ^
--- Public endpoints.
+-- |
+-- Public endpoint.
 type Public = "api" :> LoginApi :<|> Raw
 
--- ^
+-- |
 -- Get Search Items. 
 -- Post Add Item.
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
@@ -42,11 +43,12 @@ type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
         :> ReqBody '[JSON] FileInput
         :> Post '[JSON] ()
 
--- ^
+-- |
 -- Get Search Word Vector.
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
--- ^
+-- |
+-- Get Sesscion Token check.
 -- Post Login
 -- response access token.
 type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] ()

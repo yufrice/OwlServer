@@ -7,19 +7,13 @@ module Handler.AddItem
   )
 where
 
-import           Control.Monad.Reader           ( asks
-                                                , ap
-                                                , liftIO
+import           Control.Monad.Reader           ( 
+                                                 liftIO
                                                 , liftM2
-                                                , MonadIO
-                                                , MonadReader
                                                 )
-import           Control.Monad.Trans.Maybe
 import           Control.Lens                   ( (^.) )
 import           Crypto.Hash
 import qualified Data.Text                     as T
-import           Data.Text.Lazy.Encoding        ( encodeUtf8 )
-import qualified Data.ByteString               as B
 import qualified Data.ByteString.Lazy          as LB
 import           Database.Persist.MongoDB
 import           Servant
@@ -35,6 +29,9 @@ import           Lib.Auth                       ( Authorization(..)
                                                 )
 import           Utils
 
+-- |
+-- トークンをチェックしてDBに登録. 
+-- あとで画像か否かのチェックぐらいは書く.
 postAddItem :: Maybe Authorization -> FileInput -> Owl ()
 postAddItem token input = case return $ auth token of
   Left  err -> throwError err
@@ -50,10 +47,10 @@ postAddItem token input = case return $ auth token of
 writeImage :: FileInput -> IO T.Text
 writeImage input = do
   pwd <- getCurrentDirectory
-  let hash = (++) (show $ h $ input ^. file) $ T.unpack $ input ^. format
-  openFile (pwd </> "static/img" </> hash) WriteMode
+  let _hash = (++) (show $ h $ input ^. file) $ T.unpack $ input ^. format
+  openFile (pwd </> "static/img" </> _hash) WriteMode
     >>= (\m -> LB.hPut m (input ^. file) >> hClose m)
-  return $ T.pack hash
+  return $ T.pack _hash
  where
   h :: LB.ByteString -> Digest SHA3_256
   h = hashlazy

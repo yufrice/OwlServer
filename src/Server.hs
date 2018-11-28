@@ -1,31 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 module Server
   ( app
   )
 where
 
-import           Control.Monad.Reader           ( ReaderT
-                                                , runReaderT
+import           Control.Monad.Reader           ( 
+                                                 runReaderT
                                                 )
-import           Database.Persist.MongoDB       ( ConnectionPool )
 import           Servant
 
 import           Api
 import           Config
-import           Data.Maybe                     ( mapMaybe )
-import           Data.FileEmbed                 ( embedFile
-                                                , embedDir
-                                                )
-import           Data.ByteString
 import           Handler.GetItem
 import           Handler.AddItem
 import           Handler.GetVector
 import           Handler.Login
-import           Network.Wai.Application.Static
-import           WaiAppStatic.Types
-import           Network.Wai.Middleware.Vhost   ( redirectTo )
 
 app :: AppConfig -> Application
 app env = serve api $ hoistServer api (`runReaderT` env) server
@@ -48,11 +38,16 @@ itemApi = getItem :<|> postAddItem
 vectorApi :: ServerT VectorApi Owl
 vectorApi = getVector
 
+-- |
+-- 画像の書き込みがDockerで閉じ込められる都合上API側で.
+-- Nginx側で /imgにリバースプロキシ
 img :: ServerT Raw Owl
 img = serveDirectoryFileServer "./static/img"
 
-static :: ServerT Raw Owl
-static = serveDirectoryWith $ staticConfig "./static"
+-- |
+-- デッドコード
+-- static :: ServerT Raw Owl
+-- static = serveDirectoryWith $ staticConfig "./static"
 
 -- staticFiles :: [(FilePath, ByteString)]
 -- staticFiles =
@@ -62,14 +57,24 @@ static = serveDirectoryWith $ staticConfig "./static"
 --   ]
   -- { ssLookupFile       = ssLookupFile $ embeddedSettings $(embedDir "./static")
 
-staticConfig :: FilePath -> StaticSettings
-staticConfig path = (defaultFileServerSettings path)
-  { ssIndices          = mapMaybe toPiece ["index.html"]
-  , ssAddTrailingSlash = True
-  , ss404Handler       = Just redirectHome
-  }
-redirectHome :: Application
-redirectHome _ sendResponse = sendResponse $ redirectTo "/"
+-- |
+-- デッドコード
+-- staticConfig :: FilePath -> StaticSettings
+-- staticConfig path = (defaultFileServerSettings path)
+--   { ssIndices          = mapMaybe toPiece ["index.html"]
+--   , ssAddTrailingSlash = True
+--   , ss404Handler       = Just redirectHome
+--   }
 
-type AppServer api = ServerT api AppHandler
-type AppHandler = ReaderT ConnectionPool Handler
+-- |
+-- デッドコード
+-- redirectHome :: Application
+-- redirectHome _ sendResponse = sendResponse $ redirectTo "/"
+
+-- |
+-- デッドコード
+-- type AppServer api = ServerT api AppHandler
+
+-- |
+-- デッドコード
+-- type AppHandler = ReaderT ConnectionPool Handler

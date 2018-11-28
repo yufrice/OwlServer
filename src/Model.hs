@@ -6,6 +6,7 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Model
     ( module Model
@@ -26,7 +27,6 @@ import           Database.Persist.Quasi
 import           Database.Persist.MongoDB
                                          hiding ( master )
 import           Database.Persist.TH
-import           Servant
 import           Language.Haskell.TH.Syntax
 import           Models.Vec
 

@@ -6,7 +6,6 @@ module Main
 where
 
 import           Control.Lens.Getter            ( (^.) )
-import           Data.Text                      ( Text )
 import           Data.Yaml                      ( decodeFileEither
                                                 , prettyPrintParseException
                                                 , ParseException

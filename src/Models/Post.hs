@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Models.Post where
 
@@ -11,26 +12,27 @@ import           Data.Aeson              hiding ( decode
 import           Data.ByteString.Lazy
 import           Data.ByteString.Base64.Lazy    ( decode )
 import           Data.Text                      ( Text )
-import           Data.Text.Encoding             ( encodeUtf8
-                                                , decodeUtf8
-                                                )
+import           Data.Text.Encoding             ( encodeUtf8)
 import           GHC.Generics                   ( Generic(..) )
 
--- ^
+-- |
 -- Post file form.
 data FileInput = FileInput
-  { _name :: Text
-  , _word :: Text
-  , _format :: Text
-  , _file :: ByteString
-  , _desc :: Text
+  { _name :: Text -- ^ item name
+  , _word :: Text -- ^ search word
+  , _format :: Text -- ^ file format
+  , _file :: ByteString -- ^ file binary
+  , _desc :: Text -- ^ description
   }  deriving (Generic, Show)
 
+-- |
+-- lens
 makeLenses ''FileInput
 
+-- |
+-- Lazy
 instance FromJSON ByteString where
   parseJSON = withText "ByteString.Lazy" $ either (fail "") pure . decode . fromStrict . encodeUtf8
-  -- parseJSON (Text str) = pure $ (either (const "") id . decode . encodeUtf8 . pack) str
 
 instance FromJSON FileInput where
   parseJSON  (Object v) =  FileInput <$> v .: "name"
@@ -38,3 +40,4 @@ instance FromJSON FileInput where
     <*> v .: "format"
     <*> v .: "file"
     <*> v .: "desc"
+  parseJSON _ = fail ""

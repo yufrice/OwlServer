@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DataKinds #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Models.Result
     ( SearchResult(..)
@@ -14,35 +15,35 @@ import           Data.ByteString                ( ByteString )
 import           Data.Text.Encoding             ( decodeUtf8 )
 import           Data.Text
 import           GHC.Generics
-import           Servant
-import           Servant.API                    ( ToHttpApiData(..) )
+import           Servant.API                    ( ToHttpApiData(..), Headers )
+import  Servant.API.Header (Header)
 
--- ^
+-- |
 -- Item search result.
 newtype SearchResult = SearchResult {
     result :: [ResultWord]
 } deriving (Generic, Show)
 
--- ^
+-- |
 -- Add item response code.
 data ItemPostResult = ItemPostResult {
-    code :: Int
-    , message :: String
+    code :: Int -- ^ response code
+    , message :: String -- ^ response message
 } deriving (Generic, Show)
 
--- ^
+-- |
 -- Vector search result.
 -- tuple(Word, Similarity)
 data ResultWord = ResultWord {
-    word :: Text
-    , sim :: Double
+    word :: Text    -- ^ word
+    , sim :: Double -- ^ sim
 } deriving (Generic, Show)
 
 instance ToJSON SearchResult
 instance ToJSON ResultWord
 instance ToJSON ItemPostResult
 
--- ^
+-- |
 -- Login responce.
 type LoginResult = Headers
             '[Header "access_token" Text

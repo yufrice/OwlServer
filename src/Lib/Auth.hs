@@ -18,6 +18,8 @@ import           Model
 import           Config
 import           Utils
 
+-- |
+-- AccessToken
 newtype Authorization = Authorization { getToken :: T.Text }
   deriving (Read, Show, Eq, Ord, Generic)
 
@@ -27,11 +29,14 @@ instance FromHttpApiData Authorization where
 errorResponseHeader :: N.Header
 errorResponseHeader = ("WWW-Authenticate", "Basic realm=\"\"")
 
+-- |
+-- トークン検証
+-- 期限切れと違法トークンの区別はつかない.
 auth :: Maybe Authorization -> Owl (Either ServantErr ())
 auth Nothing = return $ Left err400 { errBody    = "invalid_request."
                                     , errHeaders = [errorResponseHeader]
                                     }
-auth (Just auth) = case checkHeader $ T.words $ getToken auth of
+auth (Just header) = case checkHeader $ T.words $ getToken header of
   Nothing -> return $ Left err400 { errBody    = "invalid_reqest."
                                   , errHeaders = [errorResponseHeader]
                                   }
@@ -41,10 +46,11 @@ auth (Just auth) = case checkHeader $ T.words $ getToken auth of
       Nothing -> return $ Left err401 { errBody    = "invalid_token"
                                       , errHeaders = [errorResponseHeader]
                                       }
-      Just e -> return $ Right ()
+      Just _ -> return $ Right ()
 
 -- |
 -- Check and parse Bearer token.
+-- パースするだけ.
 -- 
 -- >> chechHeader ["Bearer", "token"]
 -- Just "token"

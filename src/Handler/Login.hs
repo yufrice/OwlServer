@@ -16,8 +16,6 @@ import           Crypto.Hash                    ( Digest
 import           Control.Monad.IO.Class         ( liftIO )
 import           Database.Persist.MongoDB
 import qualified Data.Text                     as T
-import qualified Data.ByteArray                as Ba
-import qualified Data.ByteString               as B
 import qualified Data.Time.Clock               as DT
 import           Servant
 import           System.Entropy
@@ -28,11 +26,16 @@ import           Config
 import           Lib.Auth
 import           Utils
 
+-- |
+-- トークンリフレッシュ用.
 getLogin :: Maybe Authorization -> Owl ()
 getLogin token = case return $ auth token of
   Left  err -> throwError err
   Right _   -> return ()
 
+-- |
+-- リクエストボディを検証してセッショントークを発行.
+-- RFC 6749あたりを参考
 postLogin :: User -> Owl (LoginResult NoContent)
 postLogin user = do
   res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
@@ -45,7 +48,7 @@ postLogin user = do
             token <- liftIO $ makeToken 5
             time  <- liftIO DT.getCurrentTime
             let session = Session token time
-            runDB $ insert session
+            _ <- runDB $ insert session
             return
               $ addHeader token
               $ addHeader "Bearer"
@@ -56,6 +59,7 @@ postLogin user = do
 
 -- |
 -- Create a random token.
+-- 引数はシード値ではなくシードのビット数. おそらく固定で問題なし.
 -- 
 -- >>> makeToken 10
 -- random token
