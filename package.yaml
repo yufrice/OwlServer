@@ -53,6 +53,7 @@ dependencies:
   - directory
   - time
   - http-types
+  - file-embed
 
 library:
   source-dirs: src
@@ -65,6 +66,8 @@ executables:
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
+      - -Wall
+      - -fno-warn-unused-imports
     dependencies:
       - OwlServer
   ApiDocs:
@@ -88,6 +91,16 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - OwlServer
-      - hspec
       - QuickCheck
+      - hspec
       - hspec-wai
+  OwlServer-doctest:
+    main: DocTest.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - OwlServer
+      - doctest
+      - doctest-discover

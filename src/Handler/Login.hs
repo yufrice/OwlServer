@@ -9,7 +9,10 @@ where
 
 import           Control.Lens                   ( (^.) )
 import qualified Crypto.BCrypt                 as C
-import           Crypto.Hash
+import           Crypto.Hash                    ( Digest
+                                                , SHA256
+                                                , hash
+                                                )
 import           Control.Monad.IO.Class         ( liftIO )
 import           Database.Persist.MongoDB
 import qualified Data.Text                     as T
@@ -35,7 +38,7 @@ postLogin user = do
   res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
   case res of
     Nothing -> throwError err401
-    Just r  ->
+    Just r ->
       if C.validatePassword (entityVal r ^. userPassword) $ user ^. userPassword
         then
           (do

@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Server
   ( app
@@ -14,6 +15,10 @@ import           Servant
 import           Api
 import           Config
 import           Data.Maybe                     ( mapMaybe )
+import           Data.FileEmbed                 ( embedFile
+                                                , embedDir
+                                                )
+import           Data.ByteString
 import           Handler.GetItem
 import           Handler.AddItem
 import           Handler.GetVector
@@ -29,7 +34,7 @@ server :: ServerT APP Owl
 server = endApi :<|> public
 
 public :: ServerT Public Owl
-public = login :<|> img :<|> static
+public = login
 
 login :: ServerT LoginApi Owl
 login = getLogin :<|> postLogin
@@ -48,6 +53,14 @@ img = serveDirectoryFileServer "./static/img"
 
 static :: ServerT Raw Owl
 static = serveDirectoryWith $ staticConfig "./static"
+
+-- staticFiles :: [(FilePath, ByteString)]
+-- staticFiles =
+--   [ ("manifest.json", $(embedFile  "./static/manifest.json"))
+--   , ("favicon.ico"  , $(embedFile "./static/favicon.ico"))
+--   , ("index.html"   , $(embedFile "./static/index.html"))
+--   ]
+  -- { ssLookupFile       = ssLookupFile $ embeddedSettings $(embedDir "./static")
 
 staticConfig :: FilePath -> StaticSettings
 staticConfig path = (defaultFileServerSettings path)
