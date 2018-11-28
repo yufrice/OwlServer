@@ -1,0 +1,8 @@
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - cp -r ./docs/Haddock/* public
+  artifacts:
+    paths:
+      - public
