@@ -3,46 +3,36 @@
 
 
 -- | Please see the README on GitHub at
---   <a>https://github.com/githubuser/OwlServer#readme</a>
+--   <a>https://gitlab.com/Aripiprazole/owlServer#readme</a>
 @package OwlServer
 @version 0.1.0.0
 
 module Config
 
--- | General configs.
+-- | Context Settings.
 data AppConfig
 AppConfig :: ConnectionPool -> FilePath -> AppConfig
 [getPool] :: AppConfig -> ConnectionPool
 [staticDir] :: AppConfig -> FilePath
 
--- | Database Configs.
+-- | General configs.
 type Config = Record '["listenPort" >: Port, "staticDir" >: FilePath, "database" >: DbConfig]
 
--- | Config file path.
+-- | Database Configs.
 type DbConfig = Record '["name" >: Database, "host" >: HostName, "user" >: Text, "pass" >: Text, "poolSize" >: Int]
+
+-- | Config file path.
 defaultConfigPath :: FilePath
 
 -- | Wrap Handler in ReadMonad.
---   
---   Context Settings.
 type Owl = ReaderT AppConfig Handler
 
-module Lib.Auth
-newtype Authorization
-Authorization :: Text -> Authorization
-[getToken] :: Authorization -> Text
-errorResponseHeader :: Header
-instance GHC.Generics.Generic Lib.Auth.Authorization
-instance GHC.Classes.Ord Lib.Auth.Authorization
-instance GHC.Classes.Eq Lib.Auth.Authorization
-instance GHC.Show.Show Lib.Auth.Authorization
-instance GHC.Read.Read Lib.Auth.Authorization
-instance Web.Internal.HttpApiData.FromHttpApiData Lib.Auth.Authorization
-
 module Lib.VectorSim
+
+-- | ベクトルの次元数まで型定義したかったがチャーチ数的に300～再帰でコンパイル時間が爆発する.
 similarity :: Num a => Vector a -> Vector a -> a
 
--- | Calc Lp2 norm. O(n) O(n)
+-- | Calc Lp2 norm. O(n) O(n) 事前に正規化しているのでデッドコード.
 --   
 --   <pre>
 --   &gt;&gt;&gt; l2Norm [1,2,3]
@@ -63,11 +53,23 @@ module Models.Post
 -- | Post file form.
 data FileInput
 FileInput :: Text -> Text -> Text -> ByteString -> Text -> FileInput
+
+-- | item name
 [_name] :: FileInput -> Text
+
+-- | search word
 [_word] :: FileInput -> Text
+
+-- | file format
 [_format] :: FileInput -> Text
+
+-- | file binary
 [_file] :: FileInput -> ByteString
+
+-- | description
 [_desc] :: FileInput -> Text
+
+-- | lens
 word :: Lens' FileInput Text
 name :: Lens' FileInput Text
 format :: Lens' FileInput Text
@@ -81,18 +83,24 @@ instance GHC.Generics.Generic Models.Post.FileInput
 module Models.Result
 
 -- | Item search result.
---   
---   Add item response code.
 newtype SearchResult
 SearchResult :: [ResultWord] -> SearchResult
 [result] :: SearchResult -> [ResultWord]
 
--- | Vector search result. tuple(Word, Similarity)
+-- | Add item response code.
 data ItemPostResult
+
+-- | Login responce.
 type LoginResult = Headers '[Header "access_token" Text, Header "token_type" ByteString, Header "expires_in" Int, Header "refresh_token" ByteString]
+
+-- | Vector search result. tuple(Word, Similarity)
 data ResultWord
 ResultWord :: Text -> Double -> ResultWord
+
+-- | word
 [word] :: ResultWord -> Text
+
+-- | sim
 [sim] :: ResultWord -> Double
 instance GHC.Show.Show Models.Result.SearchResult
 instance GHC.Generics.Generic Models.Result.SearchResult
@@ -106,12 +114,9 @@ instance Data.Aeson.Types.ToJSON.ToJSON Models.Result.ItemPostResult
 instance Web.Internal.HttpApiData.ToHttpApiData Data.ByteString.Internal.ByteString
 
 module Models.Vec
+
+-- | 便宜上
 type Vec = Vector Double
-
-module Utils
-
--- | Connecting Database Utility.
-runDB :: (MonadReader AppConfig m, MonadIO m) => MongoPersistM a -> m a
 
 module Model
 unUserKey :: Key User -> (BackendKey MongoContext)
@@ -225,34 +230,69 @@ instance Data.Aeson.Types.FromJSON.FromJSON (Database.Persist.Class.PersistEntit
 instance Data.Aeson.Types.ToJSON.ToJSON Data.ByteString.Internal.ByteString
 instance Data.Aeson.Types.FromJSON.FromJSON Data.ByteString.Internal.ByteString
 
+module Utils
+
+-- | Connecting Database Utility.
+runDB :: (MonadReader AppConfig m, MonadIO m) => MongoPersistM a -> m a
+
+module Lib.Auth
+
+-- | AccessToken
+newtype Authorization
+Authorization :: Text -> Authorization
+[getToken] :: Authorization -> Text
+
+-- | トークン検証 期限切れと違法トークンの区別はつかない.
+auth :: Maybe Authorization -> Owl (Either ServantErr ())
+instance GHC.Generics.Generic Lib.Auth.Authorization
+instance GHC.Classes.Ord Lib.Auth.Authorization
+instance GHC.Classes.Eq Lib.Auth.Authorization
+instance GHC.Show.Show Lib.Auth.Authorization
+instance GHC.Read.Read Lib.Auth.Authorization
+instance Web.Internal.HttpApiData.FromHttpApiData Lib.Auth.Authorization
+
 module Api
 
--- | API endpoints.
+-- | API endpoint.
 type API = ItemApi :<|> VectorApi
 
--- | Public endpoints.
+-- | APP endpoint.
 type APP = "api" :> API :<|> Public
 api :: Proxy APP
 
--- | Get Search Word Vector.
+-- | Get Search Items. Post Add Item.
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item] :<|> "item" :> Header "Authorization" Authorization :> ReqBody '[JSON] FileInput :> Post '[JSON] ()
 
--- | Get Search Items. Post Add Item.
+-- | Get Sesscion Token check. Post Login response access token.
+type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] () :<|> "login" :> ReqBody '[JSON] User :> Post '[JSON] (LoginResult NoContent)
+
+-- | Public endpoint.
 type Public = "api" :> LoginApi :<|> Raw
 
--- | Post Login response access token.
+-- | Get Search Word Vector.
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
 module Handler.Login
-login :: User -> Owl (LoginResult NoContent)
+
+-- | リクエストボディを検証してセッショントークを発行. RFC 6749あたりを参考
+postLogin :: User -> Owl (LoginResult NoContent)
+
+-- | トークンリフレッシュ用.
+getLogin :: Maybe Authorization -> Owl ()
 
 module Handler.GetVector
+
+-- | クエリから近い単語と距離のタプルを返す.
 getVector :: Maybe Text -> Owl SearchResult
 
 module Handler.GetItem
+
+-- | 可変長のクエリを取って商品を検索. 空リストは全アイテム列挙でもいいかも.
 getItem :: [Text] -> Owl [Entity Item]
 
 module Handler.AddItem
+
+-- | トークンをチェックしてDBに登録. あとで画像か否かのチェックぐらいは書く.
 postAddItem :: Maybe Authorization -> FileInput -> Owl ()
 
 module Server
