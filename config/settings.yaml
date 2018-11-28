@@ -3,7 +3,7 @@ staticDir: "static"
 
 database:
   name: "Owl"
-  host: "127.0.0.1"
+  host: "mongo"
   user: "Owl"
   pass: "Owl"
   poolSize: 10
