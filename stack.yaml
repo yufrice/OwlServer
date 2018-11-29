@@ -69,3 +69,5 @@ build:
   haddock-arguments:
     haddock-args:
       - "--odir=./docs/Haddock"
+      - "--ignore-exports"
+      - "--no-haddock-deps"
