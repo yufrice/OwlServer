@@ -32,6 +32,7 @@ type API = ItemApi
 
 -- |
 -- Public endpoint.
+-- itemのpostしかauthかけてないのでこのドメイン分けはおかしい
 type Public = "api" :> LoginApi :<|> Raw
 
 -- |
@@ -48,7 +49,7 @@ type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
 type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 
 -- |
--- Get Sesscion Token check.
+-- Get Session Token check.
 -- Post Login
 -- response access token.
 type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] ()

@@ -9,7 +9,7 @@
 
 module Config
 
--- | Context Settings.
+-- | Context Settings. コンパイル時埋め込みなので動的な変更は無理
 data AppConfig
 AppConfig :: ConnectionPool -> FilePath -> AppConfig
 [getPool] :: AppConfig -> ConnectionPool
@@ -263,10 +263,10 @@ api :: Proxy APP
 -- | Get Search Items. Post Add Item.
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item] :<|> "item" :> Header "Authorization" Authorization :> ReqBody '[JSON] FileInput :> Post '[JSON] ()
 
--- | Get Sesscion Token check. Post Login response access token.
+-- | Get Session Token check. Post Login response access token.
 type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] () :<|> "login" :> ReqBody '[JSON] User :> Post '[JSON] (LoginResult NoContent)
 
--- | Public endpoint.
+-- | Public endpoint. itemのpostしかauthかけてないのでこのドメイン分けはおかしい
 type Public = "api" :> LoginApi :<|> Raw
 
 -- | Get Search Word Vector.

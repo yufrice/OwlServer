@@ -21,6 +21,7 @@ import           Servant                        ( Handler )
 type Owl = ReaderT AppConfig Handler
 
 -- | Context Settings.
+-- コンパイル時埋め込みなので動的な変更は無理
 data AppConfig = AppConfig
     { getPool :: ConnectionPool
     , staticDir :: FilePath
