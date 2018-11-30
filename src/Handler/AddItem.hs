@@ -7,7 +7,7 @@ module Handler.AddItem
   )
 where
 
-import           Control.Monad.Reader           ( 
+import           Control.Monad.Reader           (
                                                  liftIO
                                                 , liftM2
                                                 )
@@ -30,7 +30,7 @@ import           Lib.Auth                       ( Authorization(..)
 import           Utils
 
 -- |
--- トークンをチェックしてDBに登録. 
+-- トークンをチェックしてDBに登録.
 -- あとで画像か否かのチェックぐらいは書く.
 postAddItem :: Maybe Authorization -> FileInput -> Owl ()
 postAddItem token input = case return $ auth token of

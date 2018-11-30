@@ -41,26 +41,22 @@ postLogin user = do
   res <- runDB $ selectFirst [UserIdent ==. user ^. userIdent] []
   case res of
     Nothing -> throwError err401
-    Just r ->
-      if C.validatePassword (entityVal r ^. userPassword) $ user ^. userPassword
-        then
-          (do
+    Just r
+      | C.validatePassword (entityVal r ^. userPassword) $ user ^. userPassword -> do
             token <- liftIO $ makeToken 5
             time  <- liftIO DT.getCurrentTime
-            let session = Session token time
-            _ <- runDB $ insert session
+            _ <- runDB $ insert $ Session token time
             return
               $ addHeader token
               $ addHeader "Bearer"
               $ addHeader 3600
               $ addHeader "not implemented" NoContent
-          )
-        else throwError err401
+      | otherwise -> throwError err401
 
 -- |
 -- Create a random token.
 -- 引数はシード値ではなくシードのビット数. おそらく固定で問題なし.
--- 
+--
 -- >>> makeToken 10
 -- random token
 makeToken :: Int -> IO T.Text

@@ -25,23 +25,22 @@ import           Utils
 -- |
 -- クエリから近い単語と距離のタプルを返す.
 getVector :: Maybe T.Text -> Owl SearchResult
+getVector Nothing = return $ SearchResult []
 getVector (Just input) = do
     res <- runDB $ selectList [VectorWord ==. input] []
     if null res
-        then return $ SearchResult []
-        else
-            (do
-                vecs <- runDB $ selectList [VectorWord !=. input] []
-                let _sim =
-                        mostSim ((^.) (entityVal $ head res) vectorVector) vecs
-                let _word = map ((^. vectorWord) . entityVal) vecs
-                return
-                    $ SearchResult
-                    $ (sortBy . flip) (comparing sim)
-                    $ filter ((minSim <) . sim)
-                    $ zipWith ResultWord _word _sim
-            )
-getVector Nothing = return $ SearchResult []
+    then return $ SearchResult []
+    else (do
+        vecs <- runDB $ selectList [VectorWord !=. input] []
+        let _sim =
+                mostSim ((^.) (entityVal $ head res) vectorVector) vecs
+        let _word = map ((^. vectorWord) . entityVal) vecs
+        return
+            $ SearchResult
+            $ (sortBy . flip) (comparing sim)
+            $ filter ((minSim <) . sim)
+            $ zipWith ResultWord _word _sim
+     )
 
 -- |
 -- Filtering minimum similarity.
