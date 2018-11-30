@@ -36,7 +36,7 @@ type API = ItemApi
 type Public = "api" :> LoginApi :<|> Raw
 
 -- |
--- Get Search Items. 
+-- Get Search Items.
 -- Post Add Item.
 type ItemApi = "item" :> QueryParams "search" Text :> Get '[JSON] [Entity Item]
     :<|> "item"
@@ -53,8 +53,9 @@ type VectorApi = "vector" :> QueryParam "word" Text :> Get '[JSON] SearchResult
 -- Post Login
 -- response access token.
 type LoginApi = "login" :> Header "Authorization" Authorization :> Get '[JSON] ()
-    :<|> "login" :> ReqBody '[JSON] User
-    :> Post '[JSON] (LoginResult NoContent)
+    :<|> "login"
+        :> ReqBody '[JSON] User
+        :> Post '[JSON] (LoginResult NoContent)
 
 api :: Proxy APP
 api = Proxy
